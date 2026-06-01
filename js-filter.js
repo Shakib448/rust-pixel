@@ -57,35 +57,6 @@ export function invertJS(data) {
   }
 }
 
-export function brightnessJS(data, factor) {
-  const len = data.length;
-  for (let i = 0; i < len; i += 4) {
-    const r = data[i] * factor;
-    const g = data[i + 1] * factor;
-    const b = data[i + 2] * factor;
-    data[i] = r > 255 ? 255 : r | 0;
-    data[i + 1] = g > 255 ? 255 : g | 0;
-    data[i + 2] = b > 255 ? 255 : b | 0;
-  }
-}
-
-export function sepiaJS(data) {
-  const len = data.length;
-  for (let i = 0; i < len; i += 4) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-
-    const nr = r * 0.393 + g * 0.769 + b * 0.189;
-    const ng = r * 0.349 + g * 0.686 + b * 0.168;
-    const nb = r * 0.272 + g * 0.534 + b * 0.131;
-
-    data[i] = nr > 255 ? 255 : nr | 0;
-    data[i + 1] = ng > 255 ? 255 : ng | 0;
-    data[i + 2] = nb > 255 ? 255 : nb | 0;
-  }
-}
-
 export function sharpenJS(data, width, height) {
   const output = new Uint8ClampedArray(data.length);
   const w = width;

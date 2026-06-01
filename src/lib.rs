@@ -66,28 +66,6 @@ pub fn invert(data: &mut [u8]) {
 }
 
 #[wasm_bindgen]
-pub fn brightness(data: &mut [u8], factor: f32) {
-    for chunk in data.chunks_exact_mut(4) {
-        chunk[0] = ((chunk[0] as f32 * factor).min(255.0)) as u8;
-        chunk[1] = ((chunk[1] as f32 * factor).min(255.0)) as u8;
-        chunk[2] = ((chunk[2] as f32 * factor).min(255.0)) as u8;
-    }
-}
-
-#[wasm_bindgen]
-pub fn sepia(data: &mut [u8]) {
-    for chunk in data.chunks_exact_mut(4) {
-        let r = chunk[0] as f32;
-        let g = chunk[1] as f32;
-        let b = chunk[2] as f32;
-
-        chunk[0] = ((r * 0.393) + (g * 0.769) + (b * 0.189)).min(255.0) as u8;
-        chunk[1] = ((r * 0.349) + (g * 0.686) + (b * 0.168)).min(255.0) as u8;
-        chunk[2] = ((r * 0.272) + (g * 0.534) + (b * 0.131)).min(255.0) as u8;
-    }
-}
-
-#[wasm_bindgen]
 pub fn sharpen(data: &[u8], width: usize, height: usize) -> Vec<u8> {
     let mut output = vec![0u8; data.len()];
     let w = width;

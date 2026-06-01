@@ -2,8 +2,6 @@ import {
   boxBlurJS,
   grayscaleJS,
   invertJS,
-  brightnessJS,
-  sepiaJS,
   sharpenJS,
   edgeDetectJS,
 } from "./js-filter.js";
@@ -11,8 +9,6 @@ import init, {
   box_blur,
   grayscale,
   invert,
-  brightness,
-  sepia,
   sharpen,
   edge_detect,
 } from "./pkg/rust_pixel.js";
@@ -21,7 +17,6 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const result = document.getElementById("result");
 const BLUR_RADIUS = 5;
-const BRIGHTNESS_FACTOR = 1.3;
 
 let originalImageData = null;
 
@@ -126,48 +121,6 @@ document.getElementById("invert-js").addEventListener("click", () => {
   const time = performance.now() - start;
   ctx.putImageData(imgData, 0, 0);
   result.innerHTML = `Invert <b>JS: ${time.toFixed(2)}ms</b>`;
-});
-
-// Brightness
-document.getElementById("brightness-wasm").addEventListener("click", () => {
-  restore();
-  const imgData = getData();
-  const start = performance.now();
-  brightness(imgData.data, BRIGHTNESS_FACTOR);
-  const time = performance.now() - start;
-  ctx.putImageData(imgData, 0, 0);
-  result.innerHTML = `Brightness <span class="fast">WASM: ${time.toFixed(2)}ms</span>`;
-});
-
-document.getElementById("brightness-js").addEventListener("click", () => {
-  restore();
-  const imgData = getData();
-  const start = performance.now();
-  brightnessJS(imgData.data, BRIGHTNESS_FACTOR);
-  const time = performance.now() - start;
-  ctx.putImageData(imgData, 0, 0);
-  result.innerHTML = `Brightness <b>JS: ${time.toFixed(2)}ms</b>`;
-});
-
-// Sepia
-document.getElementById("sepia-wasm").addEventListener("click", () => {
-  restore();
-  const imgData = getData();
-  const start = performance.now();
-  sepia(imgData.data);
-  const time = performance.now() - start;
-  ctx.putImageData(imgData, 0, 0);
-  result.innerHTML = `Sepia <span class="fast">WASM: ${time.toFixed(2)}ms</span>`;
-});
-
-document.getElementById("sepia-js").addEventListener("click", () => {
-  restore();
-  const imgData = getData();
-  const start = performance.now();
-  sepiaJS(imgData.data);
-  const time = performance.now() - start;
-  ctx.putImageData(imgData, 0, 0);
-  result.innerHTML = `Sepia <b>JS: ${time.toFixed(2)}ms</b>`;
 });
 
 // Sharpen

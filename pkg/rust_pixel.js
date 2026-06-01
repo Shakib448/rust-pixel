@@ -25,16 +25,6 @@ export function box_blur(data, width, height, radius) {
 
 /**
  * @param {Uint8Array} data
- * @param {number} factor
- */
-export function brightness(data, factor) {
-    var ptr0 = passArray8ToWasm0(data, wasm.__wbindgen_export);
-    var len0 = WASM_VECTOR_LEN;
-    wasm.brightness(ptr0, len0, addHeapObject(data), factor);
-}
-
-/**
- * @param {Uint8Array} data
  * @param {number} width
  * @param {number} height
  * @returns {Uint8Array}
@@ -71,15 +61,6 @@ export function invert(data) {
     var ptr0 = passArray8ToWasm0(data, wasm.__wbindgen_export);
     var len0 = WASM_VECTOR_LEN;
     wasm.invert(ptr0, len0, addHeapObject(data));
-}
-
-/**
- * @param {Uint8Array} data
- */
-export function sepia(data) {
-    var ptr0 = passArray8ToWasm0(data, wasm.__wbindgen_export);
-    var len0 = WASM_VECTOR_LEN;
-    wasm.sepia(ptr0, len0, addHeapObject(data));
 }
 
 /**

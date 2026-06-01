@@ -3,15 +3,11 @@
 
 export function box_blur(data: Uint8Array, width: number, height: number, radius: number): Uint8Array;
 
-export function brightness(data: Uint8Array, factor: number): void;
-
 export function edge_detect(data: Uint8Array, width: number, height: number): Uint8Array;
 
 export function grayscale(data: Uint8Array): void;
 
 export function invert(data: Uint8Array): void;
-
-export function sepia(data: Uint8Array): void;
 
 export function sharpen(data: Uint8Array, width: number, height: number): Uint8Array;
 
@@ -20,11 +16,9 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly box_blur: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-    readonly brightness: (a: number, b: number, c: number, d: number) => void;
     readonly edge_detect: (a: number, b: number, c: number, d: number, e: number) => void;
     readonly grayscale: (a: number, b: number, c: number) => void;
     readonly invert: (a: number, b: number, c: number) => void;
-    readonly sepia: (a: number, b: number, c: number) => void;
     readonly sharpen: (a: number, b: number, c: number, d: number, e: number) => void;
     readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
     readonly __wbindgen_export: (a: number, b: number) => number;

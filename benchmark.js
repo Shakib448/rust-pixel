@@ -1,19 +1,15 @@
 import {
     boxBlurJS,
-    brightnessJS,
     edgeDetectJS,
     grayscaleJS,
     invertJS,
-    sepiaJS,
     sharpenJS,
 } from "./js-filter.js";
 import init, {
     box_blur,
-    brightness,
     edge_detect,
     grayscale,
     invert,
-    sepia,
     sharpen,
 } from "./pkg/rust_pixel.js";
 
@@ -57,18 +53,6 @@ const benchmarks = [
     name: "Invert",
     wasm: (data) => invert(data),
     js: (data) => invertJS(data),
-    mutates: true,
-  },
-  {
-    name: "Sepia",
-    wasm: (data) => sepia(data),
-    js: (data) => sepiaJS(data),
-    mutates: true,
-  },
-  {
-    name: "Brightness",
-    wasm: (data) => brightness(data, 1.3),
-    js: (data) => brightnessJS(data, 1.3),
     mutates: true,
   },
   {
