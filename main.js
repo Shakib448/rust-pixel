@@ -83,7 +83,7 @@ document.getElementById("blur-wasm").addEventListener("click", () => {
   );
   const time = performance.now() - start;
   const newImg = new ImageData(
-    new Uint8ClampedArray(output),
+    output,
     canvas.width,
     canvas.height,
   );
@@ -178,7 +178,7 @@ document.getElementById("sharpen-wasm").addEventListener("click", () => {
   const output = sharpen(imgData.data, canvas.width, canvas.height);
   const time = performance.now() - start;
   const newImg = new ImageData(
-    new Uint8ClampedArray(output),
+    output,
     canvas.width,
     canvas.height,
   );
@@ -205,7 +205,7 @@ document.getElementById("edge-wasm").addEventListener("click", () => {
   const output = edge_detect(imgData.data, canvas.width, canvas.height);
   const time = performance.now() - start;
   const newImg = new ImageData(
-    new Uint8ClampedArray(output),
+    output,
     canvas.width,
     canvas.height,
   );
