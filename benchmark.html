@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rust Pixel - Automated Benchmark</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #ff6b6b;
+      padding-bottom: 10px;
+    }
+    .intro {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    canvas {
+      border: 2px solid #ddd;
+      max-width: 100%;
+      display: block;
+      margin: 20px 0;
+      background: white;
+      border-radius: 4px;
+    }
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 12px 24px;
+      margin: 10px;
+      cursor: pointer;
+      border: 2px solid #ff6b6b;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background: #ff5252;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    button:disabled {
+      background: #ccc;
+      border-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin: 20px 0;
+    }
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #333;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    tr:hover {
+      background: #f9f9f9;
+    }
+    .wasm-time {
+      color: #ff6b6b;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .js-time {
+      color: #4CAF50;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .speedup {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .speedup.faster {
+      color: #2196F3;
+    }
+    .speedup.slower {
+      color: #f44336;
+    }
+    .progress {
+      margin: 20px 0;
+      padding: 15px;
+      background: #e3f2fd;
+      border-left: 4px solid #2196F3;
+      border-radius: 4px;
+      display: none;
+    }
+    .progress.active {
+      display: block;
+    }
+    input[type="file"] {
+      padding: 10px;
+      border: 2px dashed #ddd;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
+      background: white;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #ff6b6b;
+      margin: 10px 0;
+    }
+    .stat-label {
+      color: #666;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚡ Automated Performance Benchmark</h1>
+
+  <div class="intro">
+    <p><strong>Comprehensive WASM vs JavaScript Performance Testing</strong></p>
+    <p>Upload an image to automatically run all filters and compare performance.</p>
+    <input type="file" id="upload" accept="image/*">
+  </div>
+
+  <canvas id="canvas" style="display: none;"></canvas>
+
+  <div class="controls">
+    <button id="run-benchmark">Run Full Benchmark</button>
+    <button id="run-quick">Quick Test (3 iterations)</button>
+    <button id="run-thorough">Thorough Test (10 iterations)</button>
+  </div>
+
+  <div class="progress" id="progress">
+    <strong>Running benchmarks...</strong>
+    <div id="progress-text">Initializing...</div>
+  </div>
+
+  <div class="stats" id="stats" style="display: none;">
+    <div class="stat-card">
+      <div class="stat-label">Total Tests</div>
+      <div class="stat-value" id="total-tests">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">WASM Faster</div>
+      <div class="stat-value" style="color: #4CAF50;" id="wasm-wins">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">JS Faster</div>
+      <div class="stat-value" style="color: #f44336;" id="js-wins">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg Speedup</div>
+      <div class="stat-value" style="color: #2196F3;" id="avg-speedup">0x</div>
+    </div>
+  </div>
+
+  <table id="results" style="display: none;">
+    <thead>
+      <tr>
+        <th>Filter</th>
+        <th>WASM Time</th>
+        <th>JS Time</th>
+        <th>Speedup</th>
+        <th>Winner</th>
+      </tr>
+    </thead>
+    <tbody id="results-body">
+    </tbody>
+  </table>
+
+  <script type="module" src="./benchmark.js"></script>
+</body>
+</html>

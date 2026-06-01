@@ -1,0 +1,15 @@
+{
+  "name": "rust_pixel",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "rust_pixel_bg.wasm",
+    "rust_pixel.js",
+    "rust_pixel.d.ts"
+  ],
+  "main": "rust_pixel.js",
+  "types": "rust_pixel.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

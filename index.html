@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>Rust Pixel — WASM vs JavaScript Performance Comparison</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #ff6b6b;
+      padding-bottom: 10px;
+    }
+    .intro {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    canvas {
+      border: 2px solid #ddd;
+      max-width: 100%;
+      display: block;
+      margin: 20px 0;
+      background: white;
+      border-radius: 4px;
+    }
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .button-group {
+      margin: 15px 0;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border-left: 4px solid #4CAF50;
+    }
+    .button-group h3 {
+      margin: 0 0 10px 0;
+      color: #555;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    button {
+      padding: 10px 18px;
+      margin: 5px;
+      cursor: pointer;
+      border: 2px solid #ddd;
+      background: white;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .wasm-btn {
+      border-color: #ff6b6b;
+      color: #ff6b6b;
+    }
+    .wasm-btn:hover {
+      background: #ff6b6b;
+      color: white;
+    }
+    .js-btn {
+      border-color: #4CAF50;
+      color: #4CAF50;
+    }
+    .js-btn:hover {
+      background: #4CAF50;
+      color: white;
+    }
+    #reset {
+      background: #333;
+      color: white;
+      border-color: #333;
+      font-weight: bold;
+    }
+    #reset:hover {
+      background: #555;
+    }
+    .result {
+      font-size: 20px;
+      margin: 20px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+    }
+    .fast {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+    input[type="file"] {
+      padding: 10px;
+      border: 2px dashed #ddd;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Rust Pixel — Performance Benchmark</h1>
+
+  <div class="intro">
+    <p><strong>Rust (WASM) vs JavaScript</strong> — Image filter performance comparison</p>
+    <input type="file" id="upload" accept="image/*">
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <div class="controls">
+    <div class="button-group">
+      <h3>🎨 Basic Effects</h3>
+      <button class="wasm-btn" id="grayscale-wasm">Grayscale (WASM)</button>
+      <button class="js-btn" id="grayscale-js">Grayscale (JS)</button>
+      <button class="wasm-btn" id="invert-wasm">Invert (WASM)</button>
+      <button class="js-btn" id="invert-js">Invert (JS)</button>
+      <button class="wasm-btn" id="sepia-wasm">Sepia (WASM)</button>
+      <button class="js-btn" id="sepia-js">Sepia (JS)</button>
+      <button class="wasm-btn" id="brightness-wasm">Brightness (WASM)</button>
+      <button class="js-btn" id="brightness-js">Brightness (JS)</button>
+    </div>
+
+    <div class="button-group" style="border-left-color: #2196F3;">
+      <h3>🔍 Advanced Filters</h3>
+      <button class="wasm-btn" id="blur-wasm">Blur (WASM)</button>
+      <button class="js-btn" id="blur-js">Blur (JS)</button>
+      <button class="wasm-btn" id="sharpen-wasm">Sharpen (WASM)</button>
+      <button class="js-btn" id="sharpen-js">Sharpen (JS)</button>
+      <button class="wasm-btn" id="edge-wasm">Edge Detect (WASM)</button>
+      <button class="js-btn" id="edge-js">Edge Detect (JS)</button>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <button id="reset">↺ Reset Image</button>
+    </div>
+  </div>
+
+  <div class="result" id="result">Upload an image to begin testing filters.</div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
